@@ -6,3 +6,4 @@ stickers
 *.webp
 images
 *.jpg
+.gitignore

@@ -239,7 +239,7 @@ def echo_all(message):
         send_surprise(message)
     elif "examen" == message.text:
         exam(message)
-    elif "es mi cumpleaños" == message.text:
+    elif "es mi cumple" == message.text:
         birthday(message)
     else:
 	    #bot.send_message(message.chat.id, message.text) Repite lo dicho

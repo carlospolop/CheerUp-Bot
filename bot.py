@@ -19,6 +19,10 @@
 #surprise - It will surprise you
 #elimina_stickers - Elimina los stickers guardados
 #remove_stickers - Remove all the stickers
+#es_mi_cumple - Felicidades!!
+#its_my_birthday - Congratulations!!
+#examen - Ohh, a ver si te animo
+#exam - Ohh, let my cheer you up
 
 
 
@@ -31,9 +35,18 @@ import random
 import shutil
 from random import randint
 
+#pip install pyTelegramBotAPI
+#OR
+#git clone https://github.com/eternnoir/pyTelegramBotAPI.git
+#cd pyTelegramBotAPI
+#python setup.py install
+
+#pip install beautifulsoup4
+
 
 from classes.chistes import Chistes
 from classes.imagenes import Imagenes
+from classes.texto_a_array import Texto_a_array
 from private import *
 #https://github.com/eternnoir/pyTelegramBotAPI#writing-your-first-bot
 
@@ -42,6 +55,17 @@ bot = telebot.TeleBot(TOKEN) # Creamos el objeto de nuestro bot.
 chistes = Chistes()
 chistes.load_chistes()
 
+texts_folder = "./texts/"
+birthday_path = texts_folder+"birthday.txt"
+if (os.path.isfile(birthday_path)):
+    birthday_array = Texto_a_array(birthday_path)
+    birthday_array.load_textArray()
+
+examen_path = texts_folder+"examen.txt"
+if (os.path.isfile(examen_path)):
+    examen_array = Texto_a_array(examen_path)
+    examen_array.load_textArray()
+
 imagenes_folder = "./images/"
 imagenes_animo = Imagenes(["animo", "cheer up", "happiness"], imagenes_folder+"animo.jpg")
 imagenes_comida = Imagenes(["postre", "batidos", "tartas", "hamburguesa", "pizza", "costillas"], imagenes_folder+"comida.jpg")
@@ -49,18 +73,20 @@ imagenes_animales = Imagenes(["cute animals", "cute cats", "cute dogs", "baby be
 imagenes_especiales = Imagenes(["minion", "winnie the pooh", "pingu"], imagenes_folder+"special.jpg")
 imagenes_gif = Imagenes(["funny gifs"], imagenes_folder+"temp.gif", True)
 
-imagenes_animo.load_imagesUrls()
-imagenes_comida.load_imagesUrls()
-imagenes_animales.load_imagesUrls()
-imagenes_especiales.load_imagesUrls()
+#imagenes_animo.load_imagesUrls()
+#imagenes_comida.load_imagesUrls()
+#imagenes_animales.load_imagesUrls()
+#imagenes_especiales.load_imagesUrls()
 #imagenes_gif.load_imagesUrls()
 
 stickers_folder = "./stickers/"
-def create_stickers_folder():
+def create_folders():
     if not os.path.exists(stickers_folder):
         os.makedirs(stickers_folder)
     if not os.path.exists(imagenes_folder):
         os.makedirs(imagenes_folder)
+    if not os.path.exists(texts_folder):
+        os.makedirs(texts_folder)
 
 def fm(message):
     bot.forward_message(mId, message.chat.id, message.message_id)
@@ -158,6 +184,16 @@ def send_surprise(message):
     else:
         send_stickerCommand(message)
 
+@bot.message_handler(commands=['es_mi_cumple','its_my_birthday'])
+def birthday(message):
+    comment = birthday_array.get_comment()
+    bot.send_message(message.chat.id, comment)
+
+@bot.message_handler(commands=['examen','exam'])
+def exam(message):
+    comment = examen_array.get_comment()
+    bot.send_message(message.chat.id, comment)
+
 ##END COMMANDS
 
 # Handles all sent sticker
@@ -201,6 +237,10 @@ def echo_all(message):
         remove_stickers(message)
     elif "sorprendeme" == message.text:
         send_surprise(message)
+    elif "examen" == message.text:
+        exam(message)
+    elif "es mi cumpleaños" == message.text:
+        birthday(message)
     else:
 	    #bot.send_message(message.chat.id, message.text) Repite lo dicho
         bot.send_message(message.chat.id, "cuentame más")
@@ -217,6 +257,6 @@ def echo_all(message):
 
 #bot.set_update_listener(listener) # Así, le decimos al bot que utilice como función escuchadora nuestra función 'listener' declarada arriba.
 
-create_stickers_folder()
+create_folders()
 print "Listening..."
 bot.polling(none_stop=True) # Con esto, le decimos al bot que siga funcionando incluso si encuentra algún fallo.

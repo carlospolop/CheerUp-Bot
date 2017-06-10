@@ -38,4 +38,10 @@
 
 /remove_stickers - Remove all the stickers
 
+/es_mi_cumple - Felicidades!!
 
+/its_my_birthday - Congratulations!!
+
+/examen - Ohh, a ver si te animo
+
+/exam - Ohh, let my cheer you up

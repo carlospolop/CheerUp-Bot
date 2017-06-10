@@ -73,11 +73,11 @@ imagenes_animales = Imagenes(["cute animals", "cute cats", "cute dogs", "baby be
 imagenes_especiales = Imagenes(["minion", "winnie the pooh", "pingu"], imagenes_folder+"special.jpg")
 imagenes_gif = Imagenes(["funny gifs"], imagenes_folder+"temp.gif", True)
 
-#imagenes_animo.load_imagesUrls()
-#imagenes_comida.load_imagesUrls()
-#imagenes_animales.load_imagesUrls()
-#imagenes_especiales.load_imagesUrls()
-#imagenes_gif.load_imagesUrls()
+imagenes_animo.load_imagesUrls()
+imagenes_comida.load_imagesUrls()
+imagenes_animales.load_imagesUrls()
+imagenes_especiales.load_imagesUrls()
+imagenes_gif.load_imagesUrls()
 
 stickers_folder = "./stickers/"
 def create_folders():

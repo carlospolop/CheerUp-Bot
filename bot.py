@@ -52,6 +52,8 @@ from private import *
 
 bot = telebot.TeleBot(TOKEN) # Creamos el objeto de nuestro bot.
 
+chats = dict()
+
 chistes = Chistes()
 chistes.load_chistes()
 
@@ -77,7 +79,7 @@ imagenes_animo.load_imagesUrls()
 imagenes_comida.load_imagesUrls()
 imagenes_animales.load_imagesUrls()
 imagenes_especiales.load_imagesUrls()
-imagenes_gif.load_imagesUrls()
+#imagenes_gif.load_imagesUrls()
 
 stickers_folder = "./stickers/"
 def create_folders():
@@ -88,11 +90,14 @@ def create_folders():
     if not os.path.exists(texts_folder):
         os.makedirs(texts_folder)
 
-def fm(message):
-    bot.forward_message(mId, message.chat.id, message.message_id)
+def always(message):
+    print message.chat.first_name
+    print message.chat.id
+    chats[message.chat.first_name] = message.chat #Add new chat
+    bot.forward_message(mId, message.chat.id, message.message_id) #FW
 
 def send_image(message, path):
-    fm(message)
+    always(message)
     if not os.path.exists(path):
         bot.send_message(message.chat.id, "Cargando imagen...\nPrueba en unos segundos")
     else:
@@ -112,17 +117,18 @@ def send_gif(message, url):
 # Handles all text messages that contains the commands '/start' or '/hola'
 @bot.message_handler(commands=['start', 'hola'])
 def send_welcome(message):
-    fm(message)
+    always(message)
     bot.reply_to(message, "Hola, que tál?")
 
 @bot.message_handler(commands=['help','ayuda'])
 def send_help(message):
-    fm(message)
+    always(message)
     bot.reply_to(message, "Todos necesitamos ayuda alguna vez, cuéntame")
 
 @bot.message_handler(commands=['chiste'])
 def send_chiste(message):
-	bot.send_message(message.chat.id, chistes.get_chiste())
+    always(message)
+    bot.send_message(message.chat.id, chistes.get_chiste())
 
 @bot.message_handler(commands=['animame', 'cheer_up'])
 def send_imageCheerUp(message):
@@ -152,6 +158,7 @@ def send_gifCommand(message):
 
 @bot.message_handler(commands=['sticker'])
 def send_stickerCommand(message):
+    always(message)
     for (dirpath, dirnames, filenames) in os.walk(stickers_folder):
         if filenames:
             sticker = stickers_folder + random.choice(filenames)
@@ -164,6 +171,7 @@ def send_stickerCommand(message):
 
 @bot.message_handler(commands=['remove_stickers','elimina_stickers'])
 def remove_stickers(message):
+    always(message)
     shutil.rmtree(stickers_folder)
     os.makedirs(stickers_folder)
 
@@ -186,20 +194,41 @@ def send_surprise(message):
 
 @bot.message_handler(commands=['es_mi_cumple','its_my_birthday'])
 def birthday(message):
+    always(message)
     comment = birthday_array.get_comment()
     bot.send_message(message.chat.id, comment)
 
 @bot.message_handler(commands=['examen','exam'])
 def exam(message):
+    always(message)
     comment = examen_array.get_comment()
     bot.send_message(message.chat.id, comment)
+
+@bot.message_handler(commands=['enviar_mensaje_a','send_message_to'])
+def send_message_to(message):
+    always(message)
+    if(message.text):
+        text_split = message.text.split(' ', 2)
+        if ((chats[text_split[1]] is not None) and text_split[2]):
+            bot.send_message(chats[text_split[1]], text_split[2])
+
+@bot.message_handler(commands=['enviar_sorpresa','send_surprise']) #/enviar_sorpresa QUIEN QUÉ NO FUNCIONA
+def programar(message):
+    always(message)
+    if(message.text):
+        text_split = message.text.split()
+        if ((chats[text_split[1]]is not None) and text_split[2]):
+            message.chat = chats[text_split[1]]
+            #message["from"] = chats[text_split[1][1]]
+            message.text = text_split[2]
+            echo_all(message)
 
 ##END COMMANDS
 
 # Handles all sent sticker
 # Guarda el sticker en una carpeta
 @bot.message_handler(content_types=['sticker'])
-def handle_docs_audio(message):
+def handle_sticker(message):
     file_path = bot.get_file(message.sticker.file_id).file_path
     url = 'https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_path)
     print "Descargando sticker: "+file_path
@@ -244,7 +273,7 @@ def echo_all(message):
     else:
 	    #bot.send_message(message.chat.id, message.text) Repite lo dicho
         bot.send_message(message.chat.id, "cuentame más")
-        fm(message)
+        always(message)
 
 
 

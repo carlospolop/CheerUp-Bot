@@ -50,6 +50,8 @@ from classes.texto_a_array import Texto_a_array
 from private import *
 #https://github.com/eternnoir/pyTelegramBotAPI#writing-your-first-bot
 
+time.sleep(10)
+
 bot = telebot.TeleBot(TOKEN) # Creamos el objeto de nuestro bot.
 
 chats = dict()
@@ -57,7 +59,7 @@ chats = dict()
 chistes = Chistes()
 chistes.load_chistes()
 
-texts_folder = "./texts/"
+texts_folder = absPath + "/texts/"
 birthday_path = texts_folder+"birthday.txt"
 if (os.path.isfile(birthday_path)):
     birthday_array = Texto_a_array(birthday_path)
@@ -68,7 +70,7 @@ if (os.path.isfile(examen_path)):
     examen_array = Texto_a_array(examen_path)
     examen_array.load_textArray()
 
-imagenes_folder = "./images/"
+imagenes_folder = absPath + "/images/"
 imagenes_animo = Imagenes(["animo", "cheer up", "happiness"], imagenes_folder+"animo.jpg")
 imagenes_comida = Imagenes(["postre", "batidos", "tartas", "hamburguesa", "pizza", "costillas"], imagenes_folder+"comida.jpg")
 imagenes_animales = Imagenes(["cute animals", "cute cats", "cute dogs", "baby bear"], imagenes_folder+"animal.jpg")
@@ -81,7 +83,7 @@ imagenes_animales.load_imagesUrls()
 imagenes_especiales.load_imagesUrls()
 #imagenes_gif.load_imagesUrls()
 
-stickers_folder = "./stickers/"
+stickers_folder = absPath + "/stickers/"
 def create_folders():
     if not os.path.exists(stickers_folder):
         os.makedirs(stickers_folder)

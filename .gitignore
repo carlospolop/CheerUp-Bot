@@ -7,3 +7,4 @@ stickers
 images
 *.jpg
 .gitignore
+*dicts_created*

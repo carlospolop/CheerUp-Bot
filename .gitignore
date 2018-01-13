@@ -9,3 +9,4 @@ images
 .gitignore
 *dicts_created*
 *.pyc
+logs*

@@ -288,6 +288,20 @@ def echo_all(message):
 
 #bot.set_update_listener(listener) # Así, le decimos al bot que utilice como función escuchadora nuestra función 'listener' declarada arriba.
 
-create_folders()
-print "Listening..."
-bot.polling(none_stop=True) # Con esto, le decimos al bot que siga funcionando incluso si encuentra algún fallo.
+def start_listening():
+    try:
+        bot.polling(none_stop=True) # Con esto, le decimos al bot$
+    except Exception as e:
+        print("Error in bot polling: "+str(e))
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            print("Second error: "+str(e))
+
+def main():
+    create_folders()
+    print "Listening..."
+    start_listening()
+
+if __name__ == "__main__":
+    main()

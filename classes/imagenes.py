@@ -15,7 +15,6 @@ class Imagenes:
 
     def save_image(self, url):
         img_data = requests.get(url).content
-        os.system(f"ls -laR /home/runner/work/CheerUp-Bot/CheerUp-Bot/")
         with open(self.image_path, 'wb') as image:
             image.write(img_data)
 

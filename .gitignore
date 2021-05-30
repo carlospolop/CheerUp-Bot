@@ -2,9 +2,7 @@ private.py
 *private*
 .DS_Store
 *.DS_Store
-stickers
 *.webp
-images
 *.jpg
 .gitignore
 *dicts_created*

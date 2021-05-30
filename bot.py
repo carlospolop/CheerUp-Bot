@@ -71,9 +71,13 @@ imagenes_especiales = Imagenes(["minion", "winnie the pooh", "pingu", "sponge bo
 imagenes_gif = Imagenes(["funny gifs"], imagenes_folder+"temp.gif", True)
 
 imagenes_animo.load_imagesUrls()
+imagenes_animo.get_imagesUrl()
 imagenes_comida.load_imagesUrls()
+imagenes_comida.get_imagesUrl()
 imagenes_animales.load_imagesUrls()
+imagenes_animales.get_imagesUrl()
 imagenes_especiales.load_imagesUrls()
+imagenes_especiales.get_imagesUrl()
 #imagenes_gif.load_imagesUrls()
 
 print(absPath)

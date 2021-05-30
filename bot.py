@@ -50,6 +50,7 @@ chistes = Chistes()
 chistes.load_chistes()
 
 absPath = pathlib.Path(__file__).parent.absolute()
+print(absPath)
 
 texts_folder = os.path.join(absPath, "texts/")
 birthday_path = os.path.join(texts_folder, "birthday.txt")

@@ -34,11 +34,9 @@ jobs:
             git config --local user.email ""
             git config --global user.name "BotPEASS"
             git commit -m "Bot auto update" -a --allow-empty
-        if: succeeded()
 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
            github_token: ${{ secrets.GITHUB_TOKEN }}
            branch: ${{ github.ref }}
-        if: succeeded()

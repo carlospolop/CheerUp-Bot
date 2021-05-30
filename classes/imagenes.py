@@ -25,7 +25,7 @@ class Imagenes:
             params = {
                 "query": search,
                 "per_page": "30",
-                "order_by": "latest",
+                "order_by": "relevant",
                 "client_id": os.getenv('UNSPLASH_ACCESS_KEY')
             }
             r = requests.get(url, params=params)

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import os
 import requests
 from random import randint
-from bs4 import BeautifulSoup
-import urllib
 import threading
+from time import sleep
 
 class Imagenes:
     def __init__(self, searches, image_path, isGif=False):
@@ -19,22 +19,18 @@ class Imagenes:
             image.write(img_data)
 
     def load_imagesUrls(self):
-        print "Cargando imagenes..."
-        url = "https://www.ecosia.org/images?"
+        print("Cargando imagenes...")
+        url = "https://api.unsplash.com/search/photos"
         for search in self.searches:
-            getVarP = { 'p': str(self.load_page) }
-            getVarQ = { 'q': str(search) }
-            getUrl = str(url) + str(urllib.urlencode(getVarP)) + "&" + str(urllib.urlencode(getVarQ))
-            r = requests.get(getUrl)
-            print "Request realizada: "+str(getUrl)
-            soup = BeautifulSoup(r.content,'html5lib')
-            imageUrls_loaded = soup.find_all('a', {'class':"image-result js-image-result"})
-            for url_image in imageUrls_loaded:
-                #print url_image
-                #if(self.isGif and (".gif" in url_image)):
-                self.images_urls.append(url_image["href"])
-
-        self.load_page += 1
+            params = {
+                "query": search,
+                "per_page": "30",
+                "order_by": "latest",
+                "client_id": os.getenv('UNSPLASH_ACCESS_KEY')
+            }
+            r = requests.get(url, params=params)
+            self.images_urls += [u['urls']['small'] for u in r.json()['results']]
+            sleep(1)
 
     def get_imagesUrl(self):
         if not self.images_urls:

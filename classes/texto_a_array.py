@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import requests
 from random import randint
-from bs4 import BeautifulSoup
-import re
 
 class Texto_a_array:
     def __init__(self, text_path):
@@ -10,7 +7,7 @@ class Texto_a_array:
         self.text_array = []
 
     def load_textArray(self):
-        print "Cargando array de texto de: "+self.text_path
+        print("Cargando array de texto de: "+self.text_path)
         f = open(self.text_path, "r")
         for line in f:
             self.text_array.append(line)

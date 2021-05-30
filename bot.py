@@ -27,54 +27,46 @@
 
 
 import telebot # Librería de la API del bot.
-from telebot import types # Tipos para la API del bot.
-import time # Librería para hacer que el programa que controla el bot no se acabe.
+#from telebot import types # Tipos para la API del bot.
 import requests
 import os
 import random
 import shutil
 from random import randint
-
-#pip install pyTelegramBotAPI
-#OR
-#git clone https://github.com/eternnoir/pyTelegramBotAPI.git
-#cd pyTelegramBotAPI
-#python setup.py install
-
-#pip install beautifulsoup4
-
+import pathlib
 
 from classes.chistes import Chistes
 from classes.imagenes import Imagenes
 from classes.texto_a_array import Texto_a_array
-from private import *
 #https://github.com/eternnoir/pyTelegramBotAPI#writing-your-first-bot
 
-time.sleep(10)
+#time.sleep(10)
 
-bot = telebot.TeleBot(TOKEN) # Creamos el objeto de nuestro bot.
+bot = telebot.TeleBot(os.getenv('TELEGRAM_BOT_TOKEN')) # Creamos el objeto de nuestro bot.
 
 chats = dict()
 
 chistes = Chistes()
 chistes.load_chistes()
 
-texts_folder = absPath + "/texts/"
-birthday_path = texts_folder+"birthday.txt"
+absPath = pathlib.Path(__file__).parent.absolute()
+
+texts_folder = os.path.join(absPath, "texts/")
+birthday_path = os.path.join(texts_folder, "birthday.txt")
 if (os.path.isfile(birthday_path)):
     birthday_array = Texto_a_array(birthday_path)
     birthday_array.load_textArray()
 
-examen_path = texts_folder+"examen.txt"
+examen_path = os.path.join(texts_folder, "examen.txt")
 if (os.path.isfile(examen_path)):
     examen_array = Texto_a_array(examen_path)
     examen_array.load_textArray()
 
-imagenes_folder = absPath + "/images/"
-imagenes_animo = Imagenes(["animo", "cheer up", "happiness"], imagenes_folder+"animo.jpg")
-imagenes_comida = Imagenes(["postre", "batidos", "tartas", "hamburguesa", "pizza", "costillas"], imagenes_folder+"comida.jpg")
-imagenes_animales = Imagenes(["cute animals", "cute cats", "cute dogs", "baby bear"], imagenes_folder+"animal.jpg")
-imagenes_especiales = Imagenes(["minion", "winnie the pooh", "pingu"], imagenes_folder+"special.jpg")
+imagenes_folder = os.path.join(absPath, "images/")
+imagenes_animo = Imagenes(["animo", "cheer up", "happiness", "super happy"], imagenes_folder+"animo.jpg")
+imagenes_comida = Imagenes(["dessert", "cake", "hamburguer", "pizza", "ribs", "milkshakes", "cocktail"], imagenes_folder+"comida.jpg")
+imagenes_animales = Imagenes(["cute animals", "cute cats", "cute dogs", "baby bear", "cute rabbit"], imagenes_folder+"animal.jpg")
+imagenes_especiales = Imagenes(["minion", "winnie the pooh", "pingu", "sponge bob"], imagenes_folder+"special.jpg")
 imagenes_gif = Imagenes(["funny gifs"], imagenes_folder+"temp.gif", True)
 
 imagenes_animo.load_imagesUrls()
@@ -83,7 +75,8 @@ imagenes_animales.load_imagesUrls()
 imagenes_especiales.load_imagesUrls()
 #imagenes_gif.load_imagesUrls()
 
-stickers_folder = absPath + "/stickers/"
+print(absPath)
+stickers_folder = os.path.join(absPath, "stickers/")
 def create_folders():
     if not os.path.exists(stickers_folder):
         os.makedirs(stickers_folder)
@@ -93,10 +86,12 @@ def create_folders():
         os.makedirs(texts_folder)
 
 def always(message):
-    print message.chat.first_name
-    print message.chat.id
-    chats[message.chat.first_name] = message.chat #Add new chat
-    bot.forward_message(mId, message.chat.id, message.message_id) #FW
+    pass
+    """print(message.chat.first_name)
+    #print(message.chat.id)
+    #chats[message.chat.first_name] = message.chat #Add new chat
+    #bot.forward_message(mId, message.chat.id, message.message_id) #FW
+    """
 
 def send_image(message, path):
     always(message)
@@ -105,7 +100,7 @@ def send_image(message, path):
     else:
         image = open(path, 'rb')
         bot.send_photo(message.chat.id, image)
-        bot.send_photo(message.chat.id, "FILEID")
+        #bot.send_photo(message.chat.id, "FILEID")
 
 def send_gif(message, url):
     img_data = requests.get(url).content
@@ -232,8 +227,8 @@ def programar(message):
 @bot.message_handler(content_types=['sticker'])
 def handle_sticker(message):
     file_path = bot.get_file(message.sticker.file_id).file_path
-    url = 'https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_path)
-    print "Descargando sticker: "+file_path
+    url = 'https://api.telegram.org/file/bot{0}/{1}'.format(os.getenv('TELEGRAM_BOT_TOKEN'), file_path)
+    print("Descargando sticker: ")+file_path
     sticker = requests.get(url)
     with open(file_path, 'wb') as new_sticker: #Lo guarda en la carpeta stickers/ID.webp
         new_sticker.write(sticker.content)
@@ -300,7 +295,7 @@ def start_listening():
 
 def main():
     create_folders()
-    print "Listening..."
+    print("Listening...")
     start_listening()
 
 if __name__ == "__main__":

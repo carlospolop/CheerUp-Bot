@@ -84,10 +84,13 @@ print(absPath)
 stickers_folder = os.path.join(absPath, "stickers/")
 def create_folders():
     if not os.path.exists(stickers_folder):
+        print(f"Creating {stickers_folder}")
         os.makedirs(stickers_folder)
     if not os.path.exists(imagenes_folder):
+        print(f"Creating {imagenes_folder}")
         os.makedirs(imagenes_folder)
     if not os.path.exists(texts_folder):
+        print(f"Creating {texts_folder}")
         os.makedirs(texts_folder)
 
 def always(message):

@@ -15,6 +15,7 @@ class Imagenes:
 
     def save_image(self, url):
         img_data = requests.get(url).content
+        os.system(f"ls {self.image_path}")
         with open(self.image_path, 'wb') as image:
             image.write(img_data)
 

@@ -19,7 +19,7 @@ jobs:
         run: python3 -m pip install -r requirements.txt
 
       - name: Run bot
-        run: python3 bot.py
+        run: timout 1 python3 bot.py
         shell: bash
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

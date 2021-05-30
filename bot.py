@@ -68,6 +68,7 @@ imagenes_animo = Imagenes(["animo", "cheer up", "happiness", "super happy"], ima
 imagenes_comida = Imagenes(["dessert", "cake", "hamburguer", "pizza", "ribs", "milkshakes", "cocktail"], imagenes_folder+"comida.jpg")
 imagenes_animales = Imagenes(["cute animals", "cute cats", "cute dogs", "baby bear", "cute rabbit"], imagenes_folder+"animal.jpg")
 imagenes_especiales = Imagenes(["minion", "winnie the pooh", "pingu", "sponge bob"], imagenes_folder+"special.jpg")
+imagenes_sexy = Imagenes(["sexy"], imagenes_folder+"sexy.jpg")
 imagenes_gif = Imagenes(["funny gifs"], imagenes_folder+"temp.gif", True)
 
 imagenes_animo.load_imagesUrls()
@@ -148,6 +149,11 @@ def send_imageFood(message):
 @bot.message_handler(commands=['animal'])
 def send_imageAnimal(message):
     path = imagenes_animales.get_path()
+    send_image(message,path)
+
+@bot.message_handler(commands=['sexy'])
+def send_imageAnimal(message):
+    path = imagenes_sexy.get_path()
     send_image(message,path)
 
 @bot.message_handler(commands=['especial', 'special'])

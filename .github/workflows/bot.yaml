@@ -2,7 +2,7 @@ name: bot
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
         run: python3 -m pip install -r requirements.txt
 
       - name: Run bot
-        run: timeout 21540 python3 bot.py
+        run: timeout 7170 python3 bot.py
         shell: bash
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

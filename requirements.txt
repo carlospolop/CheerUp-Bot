@@ -1,2 +1,3 @@
 pyTelegramBotAPI
 bs4
+lxml

@@ -1,0 +1,40 @@
+name: bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.2
+
+      - name: Setup Dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Run bot
+        run: python3 bot.py
+        shell: bash
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+
+      - name: Create local changes
+        run: git add .
+
+      - name: Commit results to Github
+        run: |
+            git config --local user.email ""
+            git config --global user.name "BotPEASS"
+            git commit -m "Bot auto update" -a --allow-empty
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+           branch: ${{ github.ref }}

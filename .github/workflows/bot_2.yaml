@@ -24,6 +24,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          ENCRYPTION_PASSWD: ${{ secrets.ENCRYPTION_PASSWD }}
 
       - name: Create local changes
         run: git add .

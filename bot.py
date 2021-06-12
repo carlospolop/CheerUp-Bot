@@ -38,6 +38,7 @@ import pathlib
 from classes.chistes import Chistes
 from classes.imagenes import Imagenes
 from classes.texto_a_array import Texto_a_array
+from classes.myaes import MyAES
 #https://github.com/eternnoir/pyTelegramBotAPI#writing-your-first-bot
 
 #time.sleep(10)
@@ -154,7 +155,7 @@ def send_imageAnimal(message):
     send_image(message,path)
 
 @bot.message_handler(commands=['sexy'])
-def send_imageAnimal(message):
+def send_imageSexy(message):
     path = imagenes_sexy.get_path()
     send_image(message,path)
 
@@ -168,6 +169,11 @@ def send_gifCommand(message):
     #url = imagenes_gif.get_imagesUrl()
     #send_gif(message,url)
     pass
+
+@bot.message_handler(commands=['bonita'])
+def send_textBonita(message):
+    ma = MyAES()
+    bot.send_message(message.chat.id, ma.get_random_decrypt())
 
 @bot.message_handler(commands=['sticker'])
 def send_stickerCommand(message):

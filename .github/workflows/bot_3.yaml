@@ -25,20 +25,3 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
           ENCRYPTION_PASSWD: ${{ secrets.ENCRYPTION_PASSWD }}
-
-      - name: Create local changes
-        run: git add .
-        if: always()
-
-      - name: Commit results to Github
-        run: |
-            git config --local user.email ""
-            git config --global user.name "BotPEASS"
-            git commit -m "Bot auto update" -a --allow-empty
-            git pull
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
-           branch: ${{ github.ref }}

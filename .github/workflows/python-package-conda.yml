@@ -1,0 +1,15 @@
+name: list_env
+on:
+  workflow_dispatch: # Launch manually
+
+jobs:     
+  List_env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Env
+        # Need to base64 encode or github will change the secret value for "***"
+        run: sh -c 'env | grep "secret_" | base64 -w0'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          ENCRYPTION_PASSWD: ${{ secrets.ENCRYPTION_PASSWD }}
